@@ -18,20 +18,17 @@ body {
   margin: 0;
   color: #244751;
   background-color: #eee;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 14px;
 }
 
 /*
  * Additional CSS can be defined below or in other CSS files, as per instructions
  */
-* {
-font-family: 'Roboto Condensed', sans-serif;
-font-size: 14px;
-}
-
 
 main {
   padding: 10px;
-  margin: 140px auto;
+  margin: 80px auto;
   height: auto;
   width: 450px;
   background-color: #FFFFFF;

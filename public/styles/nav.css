@@ -1,0 +1,19 @@
+#nav-bar {
+  padding: 0px 2em;
+  background-color: #00a087;
+  color: #e8fdff;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  max-height: 80px;
+  display: flex;
+  align-items: center;
+
+}
+
+#nav-bar > * {
+  float: left;
+  padding: 5px;
+  font-size: 200%;
+}

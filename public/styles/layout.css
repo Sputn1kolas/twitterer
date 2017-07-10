@@ -34,9 +34,6 @@ main {
   margin: 140px auto;
   height: auto;
   width: 450px;
-  display: flex;
-  align-content: center;
-  align-items: center;
   background-color: #FFFFFF;
   box-sizing: border-box;
 }

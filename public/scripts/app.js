@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
 $("form").on('submit', function(event) {
-  console.log("I got called")
   event.preventDefault();
 
   $.ajax({
@@ -9,13 +8,23 @@ $("form").on('submit', function(event) {
       url:'/tweets',
       data : $("textarea").serialize(),
       success: function() {
-        console.log("By George.. it worked!")
+        loadTweets()
       }
   });
 });
 
 
+function loadTweets() {
+   $.ajax({
+      type:'GET',
+      url:'/tweets/',
+      success: function(database) {
+        renderTweets(database)
+      }
+  });
+}
 
+loadTweets()
 
 function timeSince(date) {
   date = new Date(Date.now() - date)

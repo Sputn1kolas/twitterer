@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="/styles/new-tweet.css" type="text/css" />
   <link rel="stylesheet" href="/styles/tweet-article.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+  <link href="/vendor/jquery.growl.css" rel="stylesheet" type="text/css" />
 
   <!-- External JS -->
   <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script>
+  <script src="/vendor/jquery.growl.js" type="text/javascript"></script>
 
   <!-- App JS -->
   <script type="text/javascript" src="/scripts/app.js"></script>
@@ -31,6 +33,10 @@
   <nav id="nav-bar">
     <img class="logo" src="/images/bird.png" width="80px" height="80px">
     <span class="header">Tweeter</span>
+    <div id="compose">
+        <i class="fa fa-pencil-square-o fa2" aria-hidden="true"></i>
+       <p> Compose </p>
+    </div>
   </nav>
 
   <!-- Page-specific (main) content here -->
@@ -40,7 +46,7 @@
     <section class="new-tweet">
       <h2>Compose Tweet</h2>
       <form  action="/tweets" method="POST">
-        <textarea name="text" placeholder="What are you humming about?"></textarea>
+        <textarea name="text" id="newTextArea" placeholder="What are you humming about?"></textarea>
         <input type="submit" value="Tweet">
         <span class="counter">140</span>
       </form>

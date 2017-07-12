@@ -1,16 +1,34 @@
+// to do: add hover class,  correct dates, only add latest tweet.. not everyone again!
+
 $(document).ready(function(){
+
+$("#compose").on('click', function() {
+  $("#compose").toggleClass("highlighted");
+ if($(this).hasClass("highlighted")) {
+    $(".new-tweet").slideUp()
+  } else {
+    $(".new-tweet").slideDown()
+    $("#newTextArea").focus()
+  }
+})
+
 
 $("form").on('submit', function(event) {
   event.preventDefault();
-
-  $.ajax({
-      type:'POST',
-      url:'/tweets',
-      data : $("textarea").serialize(),
-      success: function() {
-        loadTweets()
-      }
-  });
+  let string = $("textarea").serialize()
+  let stringRaw = $("textarea").val()
+  if(stringRaw.length <= 140 && string) {
+    $.ajax({
+        type:'POST',
+        url:'/tweets',
+        data : string,
+        success: function() {
+          loadTweets()
+        }
+    });
+  } else {
+     $.growl.error({ message: "Tweet is either Null, Empty or over 140 Characters ", location: 'tc' });
+  }
 });
 
 

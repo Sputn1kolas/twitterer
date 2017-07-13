@@ -2,6 +2,9 @@
 
 $(document).ready(function(){
 
+loadTweets()
+
+// toggles the compose button
 $("#compose").on('click', function() {
   $("#compose").toggleClass("highlighted");
  if($(this).hasClass("highlighted")) {
@@ -13,6 +16,7 @@ $("#compose").on('click', function() {
 })
 
 
+// Uses AJAX to send the tweet
 $("form").on('submit', function(event) {
   event.preventDefault();
   let string = $("textarea").serialize()
@@ -27,22 +31,11 @@ $("form").on('submit', function(event) {
         }
     });
   } else {
-     $.growl.error({ message: "Tweet is either Null, Empty or over 140 Characters ", location: 'tc' });
+     $.growl.error({ message: "Tweet is over 140 Characters ", location: 'tc' });
   }
 });
 
 
-function loadTweets() {
-   $.ajax({
-      type:'GET',
-      url:'/tweets/',
-      success: function(database) {
-        renderTweets(database)
-      }
-  });
-}
-
-loadTweets()
 
 function timeSince(date) {
   date = new Date(Date.now() - date)
@@ -92,35 +85,32 @@ function escapeHtml (string) {
 }
 
 
- let db  = [{
-  "user": {
-    "name": "Newton",
-    "avatars": {
-      "small":   "https://vanillicon.com/788e533873e80d2002fa14e1412b4188_50.png",
-      "regular": "https://vanillicon.com/788e533873e80d2002fa14e1412b4188.png",
-      "large":   "https://vanillicon.com/788e533873e80d2002fa14e1412b4188_200.png"
-    },
-    "handle": "@SirIsaac"
-  },
-  "content": {
-    "text": "If I have seen further it is by standing on the shoulders of giants"
-  },
-  "created_at": 1461116232227
-}]
+// uses AJAX to load the tweet
+function loadTweets() {
+   $.ajax({
+      type:'GET',
+      url:'/tweets/',
+      success: function(database) {
+        console.log(database)
+        renderTweets(database)
+      }
+  });
+}
 
-function renderTweets(db) {
-  for(var tweet = 0; tweet < db.length; tweet++) {
-    createTweetElement(db[tweet]);
+
+function renderTweets(tweetArray) {
+  for(var tweet = 0; tweet < tweetArray.length; tweet++) {
+    createTweetElement(tweetArray[tweet]);
   }
 }
 
 
-function createTweetElement(db) {
-  let name = escapeHtml(db.user.name )
-  let handle = escapeHtml(db.user.handle)
-  let avatar =   db.user.avatars.small
-  let content =  escapeHtml(db.content.text)
-  let age = timeSince (db.created_at)
+function createTweetElement(tweet) {
+  let name = escapeHtml(tweet.user.name )
+  let handle = escapeHtml(tweet.user.handle)
+  let avatar =   tweet.user.avatars.small
+  let content =  escapeHtml(tweet.content.text)
+  let age = timeSince (tweet.created_at)
 
 
   let newTweetHTML = `
@@ -143,10 +133,6 @@ function createTweetElement(db) {
 
   $("#tweets-container").prepend(newTweetHTML);
 
-}
-
-renderTweets(db)
-
-
+  }
 })
 

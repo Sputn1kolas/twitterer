@@ -1,4 +1,4 @@
-// to do: add hover class,  correct dates, only add latest tweet.. not everyone again!
+// to do: ]  correct dates,
 
 $(document).ready(function(){
 
@@ -15,7 +15,6 @@ $("#compose").on('click', function() {
   }
 })
 
-
 // Uses AJAX to send the tweet
 $("form").on('submit', function(event) {
   event.preventDefault();
@@ -27,7 +26,7 @@ $("form").on('submit', function(event) {
         url:'/tweets',
         data : string,
         success: function() {
-          loadTweets()
+          loadNewTweets()
         }
     });
   } else {
@@ -36,34 +35,19 @@ $("form").on('submit', function(event) {
 });
 
 
-
 function timeSince(date) {
-  date = new Date(Date.now() - date)
-  var seconds = Math.floor((new Date() - date) / 1000);
+  var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  console.log(date)
+  date = new Date(date) // converts inputed date to "js date"
+  let today = new Date()
 
-  // Seconds are divided by years, months, days, hours, minutes...
-  var interval = Math.floor(seconds / 31536000);
-  if (interval > 1) {
-    return interval + " years";
-  }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
+  // Discard the time and time-zone information.
+  var utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  var utc2 = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
+
 
 
 // S.O. mustash.js https://stackoverflow.com/a/12034334
@@ -91,8 +75,17 @@ function loadTweets() {
       type:'GET',
       url:'/tweets/',
       success: function(database) {
-        console.log(database)
         renderTweets(database)
+      }
+  });
+}
+
+function loadNewTweets() {
+   $.ajax({
+      type:'GET',
+      url:'/tweets/',
+      success: function(database) {
+        renderTweets([database[database.length - 1]])
       }
   });
 }
@@ -114,8 +107,8 @@ function createTweetElement(tweet) {
 
 
   let newTweetHTML = `
-  <article class="existing-tweets">
-        <header>
+    <article class="existing-tweets opaque">
+      <header>
             <img src="${avatar}" />
             <h2 class="name">${name}</h2>
             <p class="handle">${handle} </p>
@@ -123,15 +116,36 @@ function createTweetElement(tweet) {
         <p class="tweetBody">${content}</p>
         <footer>
            <p class="relativeDate"> ${age} days ago </p>
-           <div >
-              <i class="fa fa-heart tweet-action" aria-hidden="true"></i>
-              <i class="fa fa-retweet tweet-action" aria-hidden="true"></i>
-              <i class="fa fa-flag tweet-action" aria-hidden="true"></i>
-           </div>
+           <div  class="tweetIcons invisible">
+            <i class="fa fa-heart tweet-action" aria-hidden="true"></i>
+            <i class="fa fa-retweet tweet-action" aria-hidden="true"></i>
+            <i class="fa fa-flag tweet-action" aria-hidden="true"></i>
+         </div>
         </footer>
-      </article>"`
+      </article>
+      </br>
+      </br>`
 
   $("#tweets-container").prepend(newTweetHTML);
+
+
+
+$(".existing-tweets").on('mouseenter', function() {
+  console.log("mouseenter")
+  event.preventDefault();
+  $(this).find(".tweetIcons").removeClass("invisible")
+  $(this).removeClass("opaque");
+})
+
+$(".existing-tweets").on('mouseleave', function() {
+  console.log("mouseout")
+  event.preventDefault();
+  $(this).find(".tweetIcons").addClass("invisible")
+  $(this).addClass("opaque");
+})
+
+
+
 
   }
 })

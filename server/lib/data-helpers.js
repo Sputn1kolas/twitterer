@@ -6,7 +6,6 @@ const testTweets = require("./initial-tweets.json")
 const simulateDelay = require("./util/simulate-delay");
 
 
-
 // Defines helper functions for saving and getting tweets, using the database `db`
 module.exports = function makeDataHelpers(db) {
 

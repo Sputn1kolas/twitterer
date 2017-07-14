@@ -3,7 +3,45 @@ $(document).ready(function(){
 
 loadTweets()
 
-// toggles the compose button
+/////////////////// Helper functions //////////////////
+
+function timeSince(date) {
+  var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  date = new Date(date) // converts inputed date to "js date"
+  let today = new Date()
+
+  // Discard the time and time-zone information.
+  var utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  var utc2 = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  let diff = (utc2 - utc1) / _MS_PER_DAY
+  if(diff < 0) {
+    diff = diff * -1
+  }
+  return Math.floor(diff);
+}
+
+// provides a conversion to escapeable html char.
+var entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
+}
+
+function escapeHtml (string) {
+  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
+
+/////////////////// AJAX + Styling functions //////////////////
+
+
+// Toggles the compose button
 $("#compose").on('click', function() {
   $("#compose").toggleClass("highlighted");
  if($(this).hasClass("highlighted")) {
@@ -34,40 +72,9 @@ $("form").on('submit', function(event) {
 });
 
 
-function timeSince(date) {
-  var _MS_PER_DAY = 1000 * 60 * 60 * 24;
-  date = new Date(date) // converts inputed date to "js date"
-  let today = new Date()
-
-  // Discard the time and time-zone information.
-  var utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-  var utc2 = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-
-  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-}
 
 
-
-// S.O. mustash.js https://stackoverflow.com/a/12034334
-var entityMap = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;',
-  '/': '&#x2F;',
-  '`': '&#x60;',
-  '=': '&#x3D;'
-}
-
-function escapeHtml (string) {
-  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
-    return entityMap[s];
-  });
-}
-
-
-// uses AJAX to load the tweet
+// uses AJAX to all of the tweets
 function loadTweets() {
    $.ajax({
       type:'GET',
@@ -78,6 +85,7 @@ function loadTweets() {
   });
 }
 
+// Loads just the lastest tweet
 function loadNewTweets() {
    $.ajax({
       type:'GET',
@@ -88,14 +96,13 @@ function loadNewTweets() {
   });
 }
 
-
 function renderTweets(tweetArray) {
   for(var tweet = 0; tweet < tweetArray.length; tweet++) {
     createTweetElement(tweetArray[tweet]);
   }
 }
 
-
+// Creates the HTML for each new element
 function createTweetElement(tweet) {
   let name = escapeHtml(tweet.user.name )
   let handle = escapeHtml(tweet.user.handle)
@@ -127,24 +134,25 @@ function createTweetElement(tweet) {
   $("#tweets-container").prepend(newTweetHTML);
 
 
-// declare this on the section, not on the event. so that i can
-// exitingPare.on("event", childrenToBeCreated..
-$(".existing-tweets").on('mouseenter', function() {
-  console.log("mouseenter")
-  event.preventDefault();
-  $(this).find(".tweetIcons").removeClass("invisible")
-  $(this).removeClass("opaque");
-})
+// Function which adds hover
+function opacityHover(container, object){
+  $(container).on('mouseenter', object, function() {
+    event.preventDefault();
+    $(this).find(".tweetIcons").removeClass("invisible")
+    $(this).removeClass("opaque");
+  })
 
-$(".existing-tweets").on('mouseleave', function() {
-  console.log("mouseout")
-  event.preventDefault();
-  $(this).find(".tweetIcons").addClass("invisible")
-  $(this).addClass("opaque");
-})
+  $(container).on('mouseleave', object ,function() {
+    event.preventDefault();
+    $(this).find(".tweetIcons").addClass("invisible")
+    $(this).addClass("opaque");
+  })
+}
 
+/////////////////// Function Calls  //////////////////
 
-
+opacityHover("#tweets-container",".existing-tweets")
+opacityHover("#nav-bar","#compose")
 
   }
 })

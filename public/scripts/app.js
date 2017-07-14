@@ -1,4 +1,3 @@
-// to do: ]  correct dates,
 
 $(document).ready(function(){
 
@@ -37,7 +36,6 @@ $("form").on('submit', function(event) {
 
 function timeSince(date) {
   var _MS_PER_DAY = 1000 * 60 * 60 * 24;
-  console.log(date)
   date = new Date(date) // converts inputed date to "js date"
   let today = new Date()
 
@@ -129,7 +127,8 @@ function createTweetElement(tweet) {
   $("#tweets-container").prepend(newTweetHTML);
 
 
-
+// declare this on the section, not on the event. so that i can
+// exitingPare.on("event", childrenToBeCreated..
 $(".existing-tweets").on('mouseenter', function() {
   console.log("mouseenter")
   event.preventDefault();

@@ -22,5 +22,5 @@ This repository is code for a project modelling twitter using HTML, CSS, JS, jQu
 - mongodb: ~2.0
 
 # Screen Shots
-!"Tweet Compose box"]()
-!"Tweets "]()
+!"Tweet Compose box"](https://github.com/Sputn1kolas/twitterer/blob/master/docs/Compose%20Tweet.png?raw=true)
+!"Tweets "](https://github.com/Sputn1kolas/twitterer/blob/master/docs/Tweets%20Page.png?raw=true)

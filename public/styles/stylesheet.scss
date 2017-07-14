@@ -1,0 +1,13 @@
+// sass input.scss output.css
+// sass --watch app/sass:public/stylesheets
+// OUTPUT FILE NAMED: template.css
+
+@import 'normalize.css';
+@import 'layout.css';
+@import 'nav.css';
+@import 'new-tweet.css';
+@import 'tweet-article.scss';
+@import 'jquery.growl.css';
+@import 'font-awesome.css';
+
+
